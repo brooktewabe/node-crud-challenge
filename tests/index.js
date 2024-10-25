@@ -2,6 +2,7 @@ const app = require('../index');
 const axios = require('axios');
 
 const assert = require('assert').strict;
+const { persons } = require('../services/personService'); 
 
 let server;
 
@@ -14,14 +15,12 @@ describe("Test Person CRUD API", function () {
         server.close()
     })
     it("Test Get", async function () {
-        let persons = app.get('db')
         let res = await axios.get('http://localhost:3000/person')
         assert.equal(res.status, 200)
         assert.deepEqual(persons, res.data)
     });
 
     it("Test Get By ID", async function () {
-        let persons = app.get('db')
         let res = await axios.get('http://localhost:3000/person/1')
         assert.equal(res.status, 200)
         assert.deepEqual(persons[0], res.data)
@@ -36,7 +35,6 @@ describe("Test Person CRUD API", function () {
 
         let res = await axios.post('http://localhost:3000/person', newUser)
         assert.equal(res.status, 200)
-        let persons = app.get('db')
         let insertedUser = Object.assign({}, persons[1])
         delete insertedUser.id
         assert.deepEqual(insertedUser, newUser)
@@ -127,8 +125,6 @@ describe("Test Person CRUD API", function () {
             hobbies: ['dubstep', 'jazz']
         }
         let res = await axios.put('http://localhost:3000/person/1', newUser)
-
-        let persons = app.get('db')
         newUser.id = "1"
         assert.deepEqual(persons[0], newUser)
     });
@@ -136,8 +132,6 @@ describe("Test Person CRUD API", function () {
     it("Test delete", async function () {
 
         let res = await axios.delete('http://localhost:3000/person/1')
-
-        let persons = app.get('db')
 
         assert.deepEqual(persons.filter(p => p.id == '1'), [])
     });
