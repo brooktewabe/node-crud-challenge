@@ -1,17 +1,18 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const personRoutes = require('./routes/personRoutes');
+const cors = require('cors');
 
-let persons = [{
-    id: '1',
-    name: 'Sam',
-    age: '26',
-    hobbies: []    
-}] //This is your in memory database
+const app = express();
 
-app.set('db', persons)
-//TODO: Implement crud of person
+app.use(cors());
+app.use(bodyParser.json());
+
+app.use('/person', personRoutes);
+
 
 if (require.main === module) {
-    app.listen(3000)
+    app.listen(3000, () => console.log('Server is running on port 3000'));
 }
+
 module.exports = app;
